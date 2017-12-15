@@ -1,0 +1,5 @@
+NAME=systemd
+VERSION=234
+REVISION=1
+SRC=http://anduin.linuxfromscratch.org/LFS/systemd-234-lfs.tar.xz
+SRCMD5=be1338f2775713dc33da74ac0146e37b
