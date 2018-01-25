@@ -1,6 +1,6 @@
 NAME=systemd
 VERSION=236
-REVISION=3
+REVISION=4
 SRC=https://github.com/systemd/systemd/archive/v236/systemd-236.tar.gz
 SRCMD5=8609cb9043ac8f374371cbac5546acf4
 BUILDDEPS=ninja meson

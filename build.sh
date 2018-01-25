@@ -27,12 +27,14 @@ meson --prefix=/usr                \
       -Dumount-path=/bin/umount    \
       -Db_lto=false                \
       -Dman=false                  \
-      .. || return 1
-LANG=en_US.UTF-8 NINJAJOBS=$SHED_NUMJOBS ninja || return 1
-LANG=en_US.UTF-8 DESTDIR="$SHED_FAKEROOT" ninja install || return 1
+      .. && \
+LANG=en_US.UTF-8 NINJAJOBS=$SHED_NUMJOBS ninja && \
+LANG=en_US.UTF-8 DESTDIR="$SHED_FAKEROOT" ninja install || exit 1
 rm -rfv ${SHED_FAKEROOT}/usr/lib/rpm
 mkdir -v ${SHED_FAKEROOT}/sbin
-for tool in runlevel reboot shutdown poweroff halt telinit; do
-    ln -sfv ../bin/systemctl "${SHED_FAKEROOT}/sbin/${tool}"
+for SHEDPKG_TOOL in runlevel reboot shutdown poweroff halt telinit; do
+    ln -sfv ../bin/systemctl "${SHED_FAKEROOT}/sbin/${SHEDPKG_TOOL}"
 done
 ln -sfv ../lib/systemd/systemd "${SHED_FAKEROOT}/sbin/init"
+# Install an LFS script to allow unprivileged user logins without systemd-logind
+install -v -Dm755 "${SHED_CONTRIBDIR}/systemd-user-sessions" "${SHED_FAKEROOT}/lib/systemd/systemd-user-sessions"
