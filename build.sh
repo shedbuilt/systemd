@@ -1,6 +1,6 @@
 #!/bin/bash
 # Remove tests incompatible with chroot
-sed '179,223d' -i src/resolve/meson.build
+sed '178,222d' -i src/resolve/meson.build
 # Remove unneeded render group
 sed -i 's/GROUP="render", //' rules/50-udev-default.rules.in
 # Build in a separate directory
