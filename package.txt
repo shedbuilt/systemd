@@ -1,6 +1,6 @@
 NAME=systemd
 VERSION=238
-REVISION=6
+REVISION=7
 SRC=https://github.com/systemd/systemd/archive/v238.tar.gz
 SRCMD5=76db8004647283b779234364cd637d3c
 BUILDDEPS=ninja meson
