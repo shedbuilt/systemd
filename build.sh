@@ -1,6 +1,8 @@
 #!/bin/bash
 # Remove unneeded render group
 sed -i 's/GROUP="render", //' rules/50-udev-default.rules.in
+# Remove tests broken in chroot (REMOVE FOR LATER SYSTEMD)
+sed '178,222d' -i src/resolve/meson.build
 # Build in a separate directory
 mkdir -v build
 cd build
@@ -25,8 +27,8 @@ meson --prefix=/usr                \
       -Dumount-path=/bin/umount    \
       -Db_lto=false                \
       -Dman=false                  \
-      .. && \
-LANG=en_US.UTF-8 NINJAJOBS=$SHED_NUMJOBS ninja && \
+      .. &&
+LANG=en_US.UTF-8 NINJAJOBS=$SHED_NUMJOBS ninja &&
 LANG=en_US.UTF-8 DESTDIR="$SHED_FAKEROOT" ninja install || exit 1
 rm -rfv ${SHED_FAKEROOT}/usr/lib/rpm
 mkdir -v ${SHED_FAKEROOT}/sbin
