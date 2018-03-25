@@ -1,0 +1,10 @@
+--- a/src/core/load-fragment.c	2018-03-25 00:49:57.694342571 +0000
++++ b/src/core/load-fragment.c	2018-03-25 00:50:21.209437430 +0000
+@@ -21,7 +21,6 @@
+ 
+ #include <errno.h>
+ #include <fcntl.h>
+-#include <linux/fs.h>
+ #include <linux/oom.h>
+ #if HAVE_SECCOMP
+ #include <seccomp.h>
