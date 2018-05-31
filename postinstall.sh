@@ -15,6 +15,6 @@ fi
 if [ ! -e /etc/sysctl.d/99-sysctl.conf ]; then
     ln -sfv /usr/share/defaults/etc/sysctl.d/99-sysctl.conf /etc/sysctl.d/99-sysctl.conf || exit 1
 fi
-if [ ! -e /etc/sysctl.d/99-sysctl.conf ]; then
+if [ ! -e /etc/sysctl.d/20-quiet-printk.conf ]; then
     ln -sfv /usr/share/defaults/etc/sysctl.d/20-quiet-printk.conf /etc/sysctl.d/20-quiet-printk.conf || exit 1
 fi
