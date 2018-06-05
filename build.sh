@@ -1,4 +1,5 @@
 #!/bin/bash
+declare -A SHED_PKG_LOCAL_OPTIONS=${SHED_PKG_OPTIONS_ASSOC}
 # Remove tests broken in chroot
 sed '171,$ d' -i src/resolve/meson.build &&
 # Apply upstream patches for v238
@@ -39,8 +40,14 @@ LANG=en_US.UTF-8 DESTDIR="$SHED_FAKE_ROOT" ninja install &&
 rm -rfv "${SHED_FAKE_ROOT}/usr/lib/rpm" &&
 # Install an LFS script to allow unprivileged user logins without systemd-logind
 install -v -Dm755 "${SHED_PKG_CONTRIB_DIR}/systemd-user-sessions" "${SHED_FAKE_ROOT}/lib/systemd/systemd-user-sessions" &&
-# Default network config (Eth0, DHCP, systemd-resolved)
+# Install default network config file (Eth0, DHCP, systemd-resolved)
 install -v -Dm644 "${SHED_PKG_CONTRIB_DIR}/network/10-eth0-dhcp.network" "${SHED_FAKE_ROOT}${SHED_PKG_DEFAULTS_INSTALL_DIR}/etc/systemd/network/10-eth0-dhcp.network" &&
-# Sysctl config
+# Install default sysctl config files
 install -v -Dm644 "${SHED_PKG_CONTRIB_DIR}/sysctl.d/99-sysctl.conf" "${SHED_FAKE_ROOT}${SHED_PKG_DEFAULTS_INSTALL_DIR}/etc/sysctl.d/99-sysctl.conf" &&
-install -v -m644 "${SHED_PKG_CONTRIB_DIR}/sysctl.d/20-quiet-printk.conf" "${SHED_FAKE_ROOT}${SHED_PKG_DEFAULTS_INSTALL_DIR}/etc/sysctl.d"
+install -v -m644 "${SHED_PKG_CONTRIB_DIR}/sysctl.d/20-quiet-printk.conf" "${SHED_FAKE_ROOT}${SHED_PKG_DEFAULTS_INSTALL_DIR}/etc/sysctl.d" || exit 1
+# Optionally install documentation
+if [ -n "${SHED_PKG_LOCAL_OPTIONS[docs]}" ]; then
+    mv "${SHED_FAKE_ROOT}/usr/share/doc/systemd" "$SHED_PKG_DOCS_INSTALL_DIR" || exit 1
+else
+    rm -rf "${SHED_FAKE_ROOT}/usr/share/doc"
+fi

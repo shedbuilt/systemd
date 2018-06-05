@@ -5,5 +5,5 @@ LICENSE=LGPL-2.1-or-later
 SRC=https://github.com/systemd/systemd/archive/v238/systemd-238.tar.gz
 SRCMD5=76db8004647283b779234364cd637d3c
 BUILDDEPS=ninja meson
-OPTIONS=bootstrap|release
-DEFAULTS=release
+OPTIONS=bootstrap|release (docs)
+DEFAULTS=release docs
