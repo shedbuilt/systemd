@@ -1,0 +1,29 @@
+--- a/src/core/mount-setup.c	2018-06-05 22:47:15.519348845 -1000
++++ b/src/core/mount-setup.c	2018-06-05 22:53:11.749449042 -1000
+@@ -248,6 +248,7 @@
+ 
+ int mount_cgroup_controllers(char ***join_controllers) {
+         _cleanup_set_free_free_ Set *controllers = NULL;
++        bool has_argument = !!join_controllers;
+         int r;
+ 
+         if (!cg_is_legacy_wanted())
+@@ -255,7 +256,7 @@
+ 
+         /* Mount all available cgroup controllers that are built into the kernel. */
+ 
+-        if (!join_controllers)
++        if (!has_argument)
+                 /* The defaults:
+                  * mount "cpu" + "cpuacct" together, and "net_cls" + "net_prio".
+                  *
+@@ -300,7 +301,8 @@
+ 
+                                         t = set_remove(controllers, *i);
+                                         if (!t) {
+-                                                free(*i);
++                                                if (has_argument)
++                                                        free(*i);
+                                                 continue;
+                                         }
+                                 }

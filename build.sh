@@ -6,6 +6,7 @@ sed '171,$ d' -i src/resolve/meson.build &&
 sed -i '527,565 d' src/basic/missing.h &&
 sed -i '24 d' src/core/load-fragment.c &&
 sed -i '53 a#include <sys/mount.h>' src/shared/bus-unit-util.c &&
+patch -Np1 -i "${SHED_PKG_PATCH_DIR}/systemd-v238-mount-setup-abort.patch" &&
 # Remove unneeded render group
 sed -i 's/GROUP="render", //' rules/50-udev-default.rules.in &&
 # Create separate build directory
