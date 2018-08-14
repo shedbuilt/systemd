@@ -1,12 +1,9 @@
 #!/bin/bash
 declare -A SHED_PKG_LOCAL_OPTIONS=${SHED_PKG_OPTIONS_ASSOC}
 # Remove tests broken in chroot
-sed '171,$ d' -i src/resolve/meson.build &&
-# Apply upstream patches for v238
-sed -i '527,565 d' src/basic/missing.h &&
-sed -i '24 d' src/core/load-fragment.c &&
-sed -i '53 a#include <sys/mount.h>' src/shared/bus-unit-util.c &&
-patch -Np1 -i "${SHED_PKG_PATCH_DIR}/systemd-v238-mount-setup-abort.patch" &&
+sed '166,$ d' -i src/resolve/meson.build &&
+# Apply glibc 2.28 for v239
+patch -Np1 -i "${SHED_PKG_PATCH_DIR}/systemd-239-glibc_statx_fix-1.patch" &&
 # Remove unneeded render group
 sed -i 's/GROUP="render", //' rules/50-udev-default.rules.in &&
 # Create separate build directory

@@ -1,9 +1,9 @@
 NAME=systemd
-VERSION=238
-REVISION=1
+VERSION=239
+REVISION=2
 LICENSE=LGPL-2.1-or-later
-SRC=https://github.com/systemd/systemd/archive/v238/systemd-238.tar.gz
-SRCMD5=76db8004647283b779234364cd637d3c
+SRC=https://github.com/systemd/systemd/archive/v239/systemd-239.tar.gz
+SRCMD5=6137e3f50390391cf34521d071a1a078
 BUILDDEPS=ninja meson
 OPTIONS=bootstrap|release (docs)
 DEFAULTS=release docs
