@@ -1,15 +1,22 @@
 #!/bin/bash
 declare -A SHED_PKG_LOCAL_OPTIONS=${SHED_PKG_OPTIONS_ASSOC}
+SHED_PKG_LOCAL_PKGCONFIG_PATH="/usr/lib/pkgconfig"
+if [ -n "${SHED_PKG_LOCAL_OPTIONS[bootstrap]}" ]; then
+    SHED_PKG_LOCAL_PKGCONFIG_PATH="${SHED_PKG_LOCAL_PKGCONFIG_PATH}:/tools/lib/pkgconfig"
+fi
+# Patch
+for SHED_PKG_LOCAL_PATCH in "${SHED_PKG_PATCH_DIR}"/*; do
+     patch -Np1 -i "$SHED_PKG_LOCAL_PATCH" || exit 1
+done
 # Remove tests broken in chroot
 sed '166,$ d' -i src/resolve/meson.build &&
-# Apply glibc 2.28 for v239
-patch -Np1 -i "${SHED_PKG_PATCH_DIR}/systemd-239-glibc_statx_fix-1.patch" &&
 # Remove unneeded render group
 sed -i 's/GROUP="render", //' rules/50-udev-default.rules.in &&
 # Create separate build directory
 mkdir -v build &&
 cd build &&
 # Configure
+PKG_CONFIG_PATH="$SHED_PKG_LOCAL_PKGCONFIG_PATH" \
 LANG=en_US.UTF-8                   \
 meson --prefix=/usr                \
       --sysconfdir=/etc            \

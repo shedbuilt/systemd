@@ -1,6 +1,6 @@
 NAME=systemd
 VERSION=239
-REVISION=2
+REVISION=3
 LICENSE=LGPL-2.1-or-later
 SRC=https://github.com/systemd/systemd/archive/v239/systemd-239.tar.gz
 SRCMD5=6137e3f50390391cf34521d071a1a078
