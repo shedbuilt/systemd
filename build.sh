@@ -45,6 +45,8 @@ LANG=en_US.UTF-8 DESTDIR="$SHED_FAKE_ROOT" ninja install &&
 rm -rfv "${SHED_FAKE_ROOT}/usr/lib/rpm" &&
 # Install an LFS script to allow unprivileged user logins without systemd-logind
 install -v -Dm755 "${SHED_PKG_CONTRIB_DIR}/systemd-user-sessions" "${SHED_FAKE_ROOT}/lib/systemd/systemd-user-sessions" &&
+# Install a PAM configuration to integrate with systemd-logind
+install -v -Dm644 "${SHED_PKG_CONTRIB_DIR}/systemd-user" "${SHED_FAKE_ROOT}/etc/pam.d/systemd-user" &&
 # Install default network config file (Eth0, DHCP, systemd-resolved)
 install -v -Dm644 "${SHED_PKG_CONTRIB_DIR}/network/10-eth0-dhcp.network" "${SHED_FAKE_ROOT}${SHED_PKG_DEFAULTS_INSTALL_DIR}/etc/systemd/network/10-eth0-dhcp.network" &&
 # Install default sysctl config files
