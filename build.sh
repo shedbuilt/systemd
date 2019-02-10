@@ -43,15 +43,18 @@ meson --prefix=/usr                \
 LANG=en_US.UTF-8 NINJAJOBS=$SHED_NUM_JOBS ninja &&
 LANG=en_US.UTF-8 DESTDIR="$SHED_FAKE_ROOT" ninja install &&
 rm -rfv "${SHED_FAKE_ROOT}/usr/lib/rpm" &&
-# Install an LFS script to allow unprivileged user logins without systemd-logind
-install -v -Dm755 "${SHED_PKG_CONTRIB_DIR}/systemd-user-sessions" "${SHED_FAKE_ROOT}/lib/systemd/systemd-user-sessions" &&
-# Install a PAM configuration to integrate with systemd-logind
-install -v -Dm644 "${SHED_PKG_CONTRIB_DIR}/systemd-user" "${SHED_FAKE_ROOT}/etc/pam.d/systemd-user" &&
 # Install default network config file (Eth0, DHCP, systemd-resolved)
 install -v -Dm644 "${SHED_PKG_CONTRIB_DIR}/network/10-eth0-dhcp.network" "${SHED_FAKE_ROOT}${SHED_PKG_DEFAULTS_INSTALL_DIR}/etc/systemd/network/10-eth0-dhcp.network" &&
 # Install default sysctl config files
 install -v -Dm644 "${SHED_PKG_CONTRIB_DIR}/sysctl.d/99-sysctl.conf" "${SHED_FAKE_ROOT}${SHED_PKG_DEFAULTS_INSTALL_DIR}/etc/sysctl.d/99-sysctl.conf" &&
 install -v -m644 "${SHED_PKG_CONTRIB_DIR}/sysctl.d/20-quiet-printk.conf" "${SHED_FAKE_ROOT}${SHED_PKG_DEFAULTS_INSTALL_DIR}/etc/sysctl.d" || exit 1
+if [ -n "${SHED_PKG_LOCAL_OPTIONS[pam]}" ]; then
+    # Install a PAM configuration to integrate with systemd-logind
+    install -v -Dm644 "${SHED_PKG_CONTRIB_DIR}/systemd-user" "${SHED_FAKE_ROOT}/etc/pam.d/systemd-user"  || exit 1
+else
+    # Install an LFS script to allow unprivileged user logins without systemd-logind
+    install -v -Dm755 "${SHED_PKG_CONTRIB_DIR}/systemd-user-sessions" "${SHED_FAKE_ROOT}/lib/systemd/systemd-user-sessions" || exit 1
+fi
 # Optionally install documentation
 if [ -n "${SHED_PKG_LOCAL_OPTIONS[docs]}" ]; then
     mv "${SHED_FAKE_ROOT}/usr/share/doc/systemd" "$SHED_PKG_DOCS_INSTALL_DIR" || exit 1
